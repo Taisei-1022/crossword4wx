@@ -1,51 +1,71 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ひらがなクロスワード</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0f172a">
-  <style>
-    :root { --bg:#0f172a; --card:#111827; --text:#e5e7eb; --muted:#9ca3af; --accent:#60a5fa; --grid:#334155; }
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto; background:linear-gradient(180deg,#0b1220,#0f172a); color:var(--text);}
-    .wrap{max-width:900px;margin:24px auto;padding:12px;}
-    h1{margin:0 0 8px;font-size:clamp(20px,3.5vw,28px)}
-    .muted{color:var(--muted);font-size:14px}
-    .row{display:flex;gap:8px;align-items:center;margin:10px 0}
-    button{background:var(--accent);border:0;color:#0b1220;padding:8px 12px;border-radius:8px;font-weight:700;cursor:pointer}
-    .list{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin:14px 0}
-    .card{background:var(--card);border-radius:12px;padding:12px;box-shadow:0 6px 20px rgb(0 0 0 / .25)}
-    a.btn{display:inline-block;background:var(--accent);color:#0b1220;text-decoration:none;padding:8px 12px;border-radius:8px;font-weight:700}
-    /* grid */
-    .grid{display:grid;gap:2px;background:var(--grid);padding:2px;border-radius:10px}
-    .cell{width:100%;aspect-ratio:1;background:#1f2937;display:flex;align-items:center;justify-content:center;border-radius:6px}
-    .cell input{width:100%;height:100%;text-align:center;background:transparent;border:0;color:var(--text);font-weight:700;
-      font-size:clamp(16px,4.5vw,22px)}
-    .block{background:#0b1220}
-    .toolbar{display:flex;gap:8px;align-items:center;margin:10px 0}
-    .status{color:var(--muted);font-size:12px}
-    .link{color:var(--accent)}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+<title>ひらがなクロスワード</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f172a">
+<style>
+:root { --bg:#0f172a; --card:#111827; --text:#e5e7eb; --muted:#9ca3af; --accent:#60a5fa; --grid:#334155; }
+html,body{height:100%; background:#0f172a; color:var(--text); margin:0; overflow-x:hidden;}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;}
+
+
+/* レイアウト: 画面幅に追従。左右余白はvw基準。 */
+.wrap{width:100%; max-width:900px; margin:0 auto; padding:clamp(8px,3vw,16px); box-sizing:border-box;}
+h1{margin:0 0 8px; font-size:clamp(20px,3.6vw,28px)}
+.muted{color:var(--muted); font-size:clamp(12px,2.8vw,14px)}
+.row{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:10px 0}
+button{background:var(--accent); border:0; color:#0b1220; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer}
+a.btn{display:inline-block; background:var(--accent); color:#0b1220; text-decoration:none; padding:10px 14px; border-radius:10px; font-weight:700}
+
+
+/* カード一覧は自動折返しで横スクロールを出さない */
+.list{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:10px; margin:14px 0}
+.card{background:var(--card); border-radius:12px; padding:12px; box-shadow:0 6px 20px rgb(0 0 0 / .25)}
+
+
+/* 盤面: 画面幅で自動フィット。横スクロールしない。 */
+.gridWrap{display:flex; justify-content:center;}
+.grid{
+/* 最大全幅の中で、縦横比を保ちつつフィット。 */
+width:min(92vw, 680px); /* 画面幅に合わせて縮む／広がる */
+max-width:100%;
+display:grid; gap:2px; background:var(--grid); padding:2px; border-radius:12px; box-sizing:border-box;
+grid-template-columns: repeat(var(--cols), 1fr);
+}
+.cell{position:relative; width:100%; aspect-ratio:1; background:#1f2937; display:flex; align-items:center; justify-content:center; border-radius:6px}
+.cell input{width:100%; height:100%; text-align:center; background:transparent; border:0; color:var(--text); font-weight:800; font-size:clamp(18px,5.2vw,26px)}
+.block{background:#0b1220}
+
+
+.toolbar{display:flex; gap:8px; align-items:center; margin:10px 0; flex-wrap:wrap}
+.status{color:var(--muted); font-size:12px}
+
+
+/* iOSのキーボードで横拡張しないための保険 */
+input, button { -webkit-tap-highlight-color: transparent; }
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <h1>ひらがなクロスワード</h1>
-    <div class="row">
-      <button id="homeBtn" hidden>ステージ選択へ</button>
-      <button id="offlineBtn">オフライン保存</button>
-      <span class="status" id="status">準備中…</span>
-    </div>
+<div class="wrap">
+<h1>ひらがなクロスワード</h1>
+<div class="row">
+<button id="homeBtn" hidden>ステージ選択へ</button>
+<button id="offlineBtn">オフライン保存</button>
+<span class="status" id="status">準備中…</span>
+</div>
+<div id="view"></div>
+</div>
 
-    <div id="view"></div>
-  </div>
 
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', ()=> navigator.serviceWorker.register('./sw.js'));
-    }
-  </script>
-  <script src="puzzles.js"></script>
-  <script src="app.js" defer></script>
+<script>
+if ('serviceWorker' in navigator) {
+window.addEventListener('load', ()=> navigator.serviceWorker.register('./sw.js'));
+}
+</script>
+<script src="puzzles.js"></script>
+<script src="app.js" defer></script>
 </body>
 </html>
