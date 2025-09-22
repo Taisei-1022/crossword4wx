@@ -11,8 +11,8 @@
     .wrap{max-width:900px;margin:0 auto;padding:clamp(8px,3vw,16px)}
     h1{margin:0 0 8px;font-size:clamp(20px,3.6vw,28px)}
     .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
-    button{background:#60a5fa;border:0;color:#0b1220;padding:10px 14px;border-radius:10px;font-weight:700}
-    .status{color:#9ca3af;font-size:12px}
+    button{background:#60a5fa;border:0;color:#0b1220;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer}
+    .status{color:#9ca3af;font-size:12px;margin-left:8px}
     .list{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin:14px 0}
     .card{background:#111827;border-radius:12px;padding:12px;box-shadow:0 6px 20px rgb(0 0 0 / .25)}
     .gridWrap{display:flex;justify-content:center}
@@ -27,10 +27,12 @@
 </head>
 <body>
   <div class="wrap">
-    <h1>ひらがなクロスワードv3</h1>
+    <h1>ひらがなクロスワードv4</h1>
     <div class="row">
       <button id="homeBtn" hidden>ステージ選択へ</button>
       <button id="offlineBtn">オフライン保存</button>
+      <button id="updateBtn">アップデート</button>
+      <button id="hardResetBtn" style="background:#fda4af">キャッシュ全消去</button>
       <span class="status" id="status">準備中…</span>
     </div>
     <div id="view"></div>
@@ -41,7 +43,6 @@
       window.addEventListener('load', ()=> navigator.serviceWorker.register('./sw.js'));
     }
   </script>
-  <!-- 重要：puzzles.js → app.js の順。両方 defer -->
   <script src="./puzzles.js" defer></script>
   <script src="./app.js" defer></script>
 </body>
