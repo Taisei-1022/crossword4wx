@@ -69,7 +69,7 @@ function renderHome(){
       ${PUZZLES.map(p => `
         <div class="card">
           <div style="font-weight:700;margin-bottom:8px">${p.title}</div>
-          <a class="btn" href="#/stage/${p.id}">プレイ</a>
+          <button class="btn" onclick="location.hash='#/stage/${p.id}'">プレイ</button>
         </div>
       `).join('')}
     </div>
