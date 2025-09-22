@@ -1,9 +1,9 @@
 {
-  "name": "ひらがなクロスワード",
-  "short_name": "クロスワード",
-  "start_url": ".",
-  "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#0f172a",
-  "icons": []
+"name": "ひらがなクロスワード",
+"short_name": "クロス",
+"start_url": ".",
+"display": "standalone",
+"background_color": "#0f172a",
+"theme_color": "#0f172a",
+"icons": []
 }
